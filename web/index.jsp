@@ -16,6 +16,7 @@
         <link href="vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
         <link href="css/sb-admin.css" rel="stylesheet">
         <link rel="stylesheet" href="css/style.css" />
+        
     </head>
     <body>
         <div class="container">
@@ -33,6 +34,7 @@
                     </div>
                 </div>
             </div>
+
             <h2 class="text-center">Simulacion del sistema</h2> 
             <div class="row">
                 <h3>Piezas A</h3>
@@ -41,7 +43,7 @@
                     Date fecha_actual = new java.util.Date();
                 %>
                 <div class="table-responsive">
-                    <table class="table table-striped table-bordered" id="simulacion" width="100%" cellspacing="0">
+                    <table class="table table-striped table-bordered" id="tablasimulacion" width="100%" cellspacing="0">
                         <thead>
                             <tr>
                                 <th>Num.</th>
@@ -101,7 +103,6 @@
                 </div>
             </div>
         </div>
-
         <!-- Bootstrap core JavaScript-->
         <script src="vendor/jquery/jquery.min.js"></script>
         <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -113,9 +114,10 @@
         <script src="vendor/datatables/dataTables.bootstrap4.js"></script>
         <!-- Custom scripts for all pages-->
         <script src="js/sb-admin.min.js"></script>
-        <!-- Custom scripts for this page-->
-        <script src="js/sb-admin-datatables.min.js"></script>
-        <script src="js/sb-admin-charts.min.js"></script>
-        
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $('#tablasimulacion').DataTable();
+            });
+        </script>
     </body>
 </html>
