@@ -1,6 +1,7 @@
 package net.model;
 
 import java.util.Date;
+import java.util.List;
 import net.dao.utils;
 
 public class pieza_A {
@@ -9,7 +10,8 @@ public class pieza_A {
     private Date horaLlegada, horaInicio, horaSalida;
     private Boolean isDefectuosa;
     private int idtorno;
-
+    private List<pieza_A_Error> errores;
+    
     public pieza_A(){}
 
     public pieza_A(int id, double ram1, double ram2, double ram3) {
@@ -123,6 +125,14 @@ public class pieza_A {
 
     public void setIsDefectuosa(Boolean isDefectuosa) {
         this.isDefectuosa = isDefectuosa;
+    }
+
+    public List<pieza_A_Error> getErrores() {
+        return errores;
+    }
+
+    public void setErrores(List<pieza_A_Error> errores) {
+        this.errores = errores;
     }
 
   
