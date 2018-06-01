@@ -80,7 +80,8 @@ public class simulacion {
             tornos.get(idtornodisponible - 1).setHorafin(horaSalidaA);
             tornos.get(idtornodisponible - 1).setStatus(1);
             
-             //Piezas a
+            
+            //Piezas a
             pA.setHoraLlegada(horaLlegadaA);
             pA.setHoraInicio(horaInicioA);
             pA.setHoraSalida(horaSalidaA);
@@ -92,7 +93,7 @@ public class simulacion {
             pA.setIdtorno(idtornodisponible);
             
             //Refrescamos status fresas
-            changeStatusFresa(fresas, horaLlegadaA);
+            changeStatusFresa(fresas, horaLlegadaB_Fresas);
             //si es 0 no encontro disponibles dentro de los que ya hay
             idfresadisponible = buscafresaDisponible(fresas);
             if(idfresadisponible == 0){
@@ -112,7 +113,11 @@ public class simulacion {
             tiempoEsperaB_tornos = 0;
             
             //Refrescamos status tornos
-            changeStatusTorno(tornos, horaLlegadaB_tornos);
+            if(compareDate(horaLlegadaB_tornos, horaSalidaA))
+                changeStatusTorno(tornos, horaSalidaA);
+            else
+                changeStatusTorno(tornos, horaLlegadaB_tornos);
+            
             //si es 0 no encontro disponibles dentro de los que ya hay
             idtornodisponible = buscaTornoDisponible(tornos);
             if(idtornodisponible == 0){
@@ -256,6 +261,16 @@ public class simulacion {
         int compara = horallegada.compareTo(horasalida);
         return compara == 0 || compara == 1;
     }
+    
+    private boolean compareDate(Date horallegada, Date horasalida){
+        //Validando la hora de llegada anterior
+        //-1 si la hora de llegada es antes de la hora de salida de i - 1 y se espera
+        //0 si son iguales
+        //1 entra directo y no se espera
+        int compara = horallegada.compareTo(horasalida);
+        return compara == 0 || compara == 1;
+    }
+    
     
     private int buscafresaDisponible(ArrayList<fresa> lista){
         int id = 0;
