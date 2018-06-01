@@ -3,27 +3,24 @@ package net.model;
 import java.util.Date;
 import net.dao.utils;
 
-public class pieza_A {
+public class pieza_B {
     private int id;
-    private double ram1, ram2, ram3, timeInLlegar, timeInA, tiempoEspera, timeInSystem;
+    private double ram1, ram2, ram3, ram4, timeInLlegar, timeInA, tiempoEspera, tiempoEsperaTornos, timeInSystem, timeInB; //A es tornos, B Fresas
     private Date horaLlegada, horaInicio, horaSalida;
-    private Boolean isDefectuosa;
+    private Date horaLlegadaTornos, horaInicioTornos, horaSalidaTornos;
+    private Boolean isDefectuosa; //5% y 95%
+    private int idtorno, idfresa;
 
-    public pieza_A(){}
-    public pieza_A(int id, double ram1, double ram2, double ram3, double timeInLlegar, double timeInA, double tiempoEspera, double timeInSystem, Date horaLlegada, Date horaInicio, Date horaSalida, Boolean isDefectuosa) {
+    public pieza_B(){}
+
+    public pieza_B(int id, double ram1, double ram2, double ram3, double ram4) {
         this.id = id;
         this.ram1 = utils.formatearDecimales(ram1,2);
         this.ram2 = utils.formatearDecimales(ram2,2);
         this.ram3 = utils.formatearDecimales(ram3,2);
-        this.timeInLlegar = utils.formatearDecimales(timeInLlegar,2);
-        this.timeInA = utils.formatearDecimales(timeInA,2);
-        this.tiempoEspera = utils.formatearDecimales(tiempoEspera,2);
-        this.timeInSystem = utils.formatearDecimales(timeInSystem,2);
-        this.horaLlegada = horaLlegada;
-        this.horaInicio = horaInicio;
-        this.horaSalida = horaSalida;
-        this.isDefectuosa = isDefectuosa;
+        this.ram4 = utils.formatearDecimales(ram4,2);
     }
+    
 
     public int getId() {
         return id;
@@ -33,6 +30,23 @@ public class pieza_A {
         this.id = id;
     }
 
+    public int getIdtorno() {
+        return idtorno;
+    }
+
+    public void setIdtorno(int idtorno) {
+        this.idtorno = idtorno;
+    }
+
+    public int getIdfresa() {
+        return idfresa;
+    }
+
+    public void setIdfresa(int idfresa) {
+        this.idfresa = idfresa;
+    }
+    
+    
     public double getRam1() {
         return ram1;
     }
@@ -57,6 +71,14 @@ public class pieza_A {
         this.ram3 = utils.formatearDecimales(ram3, 2);
     }
 
+    public double getRam4() {
+        return ram4;
+    }
+
+    public void setRam4(double ram4) {
+        this.ram4 = utils.formatearDecimales(ram4,2);
+    }
+
     public double getTimeInLlegar() {
         return timeInLlegar;
     }
@@ -73,12 +95,28 @@ public class pieza_A {
         this.timeInA = utils.formatearDecimales(timeInA, 2);
     }
 
+    public double getTimeInB() {
+        return timeInB;
+    }
+
+    public void setTimeInB(double timeInB) {
+        this.timeInB = utils.formatearDecimales(timeInB,2);
+    }
+    
     public double getTiempoEspera() {
         return tiempoEspera;
     }
 
     public void setTiempoEspera(double tiempoEspera) {
         this.tiempoEspera = utils.formatearDecimales(tiempoEspera, 2);
+    }
+
+    public double getTiempoEsperaTornos() {
+        return tiempoEsperaTornos;
+    }
+
+    public void setTiempoEsperaTornos(double tiempoEsperaTornos) {
+        this.tiempoEsperaTornos = utils.formatearDecimales(tiempoEsperaTornos,2);
     }
 
     public double getTimeInSystem() {
@@ -111,6 +149,30 @@ public class pieza_A {
 
     public void setHoraSalida(Date horaSalida) {
         this.horaSalida = horaSalida;
+    }
+
+    public Date getHoraLlegadaTornos() {
+        return horaLlegadaTornos;
+    }
+
+    public void setHoraLlegadaTornos(Date horaLlegadaTornos) {
+        this.horaLlegadaTornos = horaLlegadaTornos;
+    }
+
+    public Date getHoraInicioTornos() {
+        return horaInicioTornos;
+    }
+
+    public void setHoraInicioTornos(Date horaInicioTornos) {
+        this.horaInicioTornos = horaInicioTornos;
+    }
+
+    public Date getHoraSalidaTornos() {
+        return horaSalidaTornos;
+    }
+
+    public void setHoraSalidaTornos(Date horaSalidaTornos) {
+        this.horaSalidaTornos = horaSalidaTornos;
     }
 
     public Boolean getIsDefectuosa() {

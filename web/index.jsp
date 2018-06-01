@@ -1,3 +1,8 @@
+<%@page import="java.util.Locale"%>
+<%@page import="java.text.ParseException"%>
+<%@page import="java.text.DateFormat"%>
+<%@page import="com.json.JSONArray"%>
+<%@page import="com.json.JSONObject"%>
 <%@page import="java.util.Date"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.util.ArrayList"%>
@@ -35,18 +40,25 @@
                 </div>
             </div>
 
-            <h2 class="text-center">Simulacion del sistema</h2> 
-            <div class="row">
-                <h3>Piezas A</h3>
+            <h2 class="text-center">Simulacion del sistema</h2>           
                 <%
                     SimpleDateFormat fecha = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
                     Date fecha_actual = new java.util.Date();
+                    simulacion datos = new simulacion();
+                    JSONObject objJson = datos.getSimulacion();
+                    JSONArray jsonArray = objJson.getJSONArray("listaA");
+                    JSONArray fresas = objJson.getJSONArray("fresas");
+                    JSONArray tornos = objJson.getJSONArray("tornos");
+                    JSONArray jsonArrayB = objJson.getJSONArray("listaB");
+                    SimpleDateFormat formato = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
+                   
                 %>
+                
                 <div class="table-responsive">
                     <table class="table table-striped table-bordered" id="tablasimulacion" width="100%" cellspacing="0">
                         <thead>
                             <tr>
-                                <th>Num.</th>
+                                <th>Pieza A</th>
                                 <th>ri</th>
                                 <th>Tiempo en llegar (y = 2 + 6ri)</th>
                                 <th>Hora de llegada (<%= fecha.format(fecha_actual)%>)</th>
@@ -58,28 +70,125 @@
                                 <th>ri</th>
                                 <th>Defectuosa/no defectuosa</th>
                                 <th>Tiempo en el sistema</th>
+                                <th>id torno</th>
                             </tr>
                         </thead>
                         <tbody>
                             <%
-                                simulacion datos = new simulacion();
-                                ArrayList<pieza_A> lista = (ArrayList<pieza_A>) datos.getSimulacionA();
-                                for (int i = 0; i < lista.size(); i++) {
-                                    pieza_A p = lista.get(i);
+                                
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject p = jsonArray.getJSONObject(i);
+                                    String strhorallegada = p.getString("horaLlegada");
+                                    String strhorainicio = p.getString("horaInicio");
+                                    String strhorasalida = p.getString("horaSalida");
+                                    Date horallegada = formato.parse(strhorallegada);
+                                    Date horainicio = formato.parse(strhorainicio);
+                                    Date horasalida = formato.parse(strhorasalida);
                             %>
                             <tr>
-                                <td><%=p.getId()%></td>
-                                <td><%=p.getRam1()%></td>
-                                <td><%=p.getTimeInLlegar()%></td>
-                                <td><%=fecha.format(p.getHoraLlegada())%></td>
-                                <td><%=fecha.format(p.getHoraInicio())%></td>
-                                <td><%=p.getRam2()%></td>
-                                <td><%=p.getTimeInA()%></td>
-                                <td><%=fecha.format(p.getHoraSalida())%></td>
-                                <td><%=p.getTiempoEspera()%></td>
-                                <td><%=p.getRam3()%></td>
-                                <td><%=p.getIsDefectuosa()%></td>
-                                <td><%=p.getTimeInSystem()%></td>
+                                <td><%=p.getInt("id")%> </td>
+                                <td><%=p.getDouble("ram1")%></td>
+                                <td><%=p.getDouble("timeInLlegar")%></td>
+                                <td><%=fecha.format(horallegada)%></td>
+                                <td><%=fecha.format(horainicio)%></td>
+                                <td><%=p.getDouble("ram2")%></td>
+                                <td><%=p.getDouble("timeInA")%></td>
+                                <td><%=fecha.format(horasalida)%></td>
+                                <td><%=p.getDouble("tiempoEspera")%></td>
+                                <td><%=p.getDouble("ram3")%></td>
+                                <td><%=p.getBoolean("isDefectuosa")%></td>
+                                <td><%=p.getDouble("timeInSystem")%></td>
+                                <td><%=p.getInt("idtorno")%></td>
+                            </tr>
+                            <% }%>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>Pieza A</th>
+                                <th>ri</th>
+                                <th>Tiempo en llegar (y = 2 + 6ri)</th>
+                                <th>Hora de llegada (<%= fecha.format(fecha_actual)%>)</th>
+                                <th>Hora de Inicio </th>
+                                <th>ri</th>
+                                <th>Tiempo en dep. A (z = 5 + 6ri)</th>
+                                <th>Hora de salida</th>
+                                <th>Tiempo de espera</th>
+                                <th>ri</th>
+                                <th>Defectuosa/no defectuosa</th>
+                                <th>Tiempo en el sistema</th>
+                                <th>id torno</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                                
+                <!-- PIEZA B -->   
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered" id="tablasimulacionB" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Pieza B</th>
+                                <th>ri</th>
+                                <th>Tiempo en llegar (y = 2 + 6ri)</th>
+                                <th>Hora de llegada (<%= fecha.format(fecha_actual)%>)</th>
+                                <th>Hora de Inicio fresas</th>
+                                <th>ri</th>
+                                <th>Tiempo en dep. fresas (6 + 6ri)</th>
+                                <th>Hora de salida</th>
+                                <th>Tiempo de espera</th>
+                                <th>Hora de llegada tornos</th>
+                                <th>Hora de Inicio tornos</th>
+                                <th>ri</th>
+                                <th>Tiempo en dep. tornos (2 + 2ri)</th>
+                                <th>Hora de salida</th>
+                                <th>Tiempo de espera</th>
+                                <th>ri</th>
+                                <th>Defectuosa/no defectuosa</th>
+                                <th>Tiempo en el sistema</th>
+                                <th>id torno</th>
+                                <th>id fresa</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <%
+                                
+                                for (int i = 0; i < jsonArrayB.length(); i++) {
+                                    JSONObject p = jsonArrayB.getJSONObject(i);
+                                    String strhorallegadaA = p.getString("horaLlegada");
+                                    String strhorainicioA = p.getString("horaInicio");
+                                    String strhorasalidaA = p.getString("horaSalida");
+                                    Date horallegadaA = formato.parse(strhorallegadaA);
+                                    Date horainicioA = formato.parse(strhorainicioA);
+                                    Date horasalidaA = formato.parse(strhorasalidaA);
+                                    
+                                    String strhorallegadatornos = p.getString("horaLlegadaTornos");
+                                    String strhorainiciotornos = p.getString("horaInicioTornos");
+                                    String strhorasalidatornos = p.getString("horaSalidaTornos");
+                                    Date horallegadatornos = formato.parse(strhorallegadatornos);
+                                    Date horainiciotornos = formato.parse(strhorainiciotornos);
+                                    Date horasalidatornos = formato.parse(strhorasalidatornos);
+                            %>
+                            <tr>
+                                <td><%=p.getInt("id")%> </td>
+                                <td><%=p.getDouble("ram1")%></td>
+                                <td><%=p.getDouble("timeInLlegar")%></td>
+                                <td><%=fecha.format(horallegadaA)%></td>
+                                <td><%=fecha.format(horainicioA)%></td>
+                                <td><%=p.getDouble("ram2")%></td>
+                                <td><%=p.getDouble("timeInB")%></td>
+                                <td><%=fecha.format(horasalidaA)%></td>
+                                <td><%=p.getDouble("tiempoEsperaTornos")%></td>
+                                <td><%=fecha.format(horallegadatornos)%></td>
+                                <td><%=fecha.format(horainiciotornos)%></td>
+                                <td><%=p.getDouble("ram3")%></td>
+                                <td><%=p.getDouble("timeInA")%></td>
+                                <td><%=fecha.format(horasalidatornos)%></td>
+                                <td><%=p.getDouble("tiempoEspera")%></td>
+                                <td><%=p.getDouble("ram3")%></td>
+                                <td><%=p.getBoolean("isDefectuosa")%></td>
+                                <td><%=p.getDouble("timeInSystem")%></td>
+                                <td><%=p.getInt("idtorno")%></td>
+                                <td><%=p.getInt("idfresa")%></td>
                             </tr>
                             <% }%>
                         </tbody>
@@ -88,20 +197,29 @@
                                 <th>Num.</th>
                                 <th>ri</th>
                                 <th>Tiempo en llegar (y = 2 + 6ri)</th>
-                                <th>Hora de llegada (<%= fecha.format(fecha_actual)%>)</th>
+                                <th>Hora de llegada</th>
                                 <th>Hora de Inicio </th>
                                 <th>ri</th>
                                 <th>Tiempo en dep. A (z = 5 + 6ri)</th>
                                 <th>Hora de salida</th>
                                 <th>Tiempo de espera</th>
+                                <th>Hora de llegada tornos</th>
+                                <th>Hora de Inicio tornos</th>
+                                <th>ri</th>
+                                <th>Tiempo en dep. tornos (2 + 2ri)</th>
+                                <th>Hora de salida</th>
+                                <th>Tiempo de espera</th>
                                 <th>ri</th>
                                 <th>Defectuosa/no defectuosa</th>
                                 <th>Tiempo en el sistema</th>
+                                <th>id torno</th>
+                                <th>fresa</th>
                             </tr>
                         </tfoot>
                     </table>
                 </div>
-            </div>
+                <!--fin piezas b-->
+                
         </div>
         <!-- Bootstrap core JavaScript-->
         <script src="vendor/jquery/jquery.min.js"></script>
@@ -117,6 +235,7 @@
         <script type="text/javascript">
             $(document).ready(function() {
                 $('#tablasimulacion').DataTable();
+                $('#tablasimulacionB').DataTable();
             });
         </script>
     </body>

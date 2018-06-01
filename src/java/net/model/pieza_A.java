@@ -8,23 +8,17 @@ public class pieza_A {
     private double ram1, ram2, ram3, timeInLlegar, timeInA, tiempoEspera, timeInSystem;
     private Date horaLlegada, horaInicio, horaSalida;
     private Boolean isDefectuosa;
+    private int idtorno;
 
     public pieza_A(){}
-    public pieza_A(int id, double ram1, double ram2, double ram3, double timeInLlegar, double timeInA, double tiempoEspera, double timeInSystem, Date horaLlegada, Date horaInicio, Date horaSalida, Boolean isDefectuosa) {
+
+    public pieza_A(int id, double ram1, double ram2, double ram3) {
         this.id = id;
         this.ram1 = utils.formatearDecimales(ram1,2);
         this.ram2 = utils.formatearDecimales(ram2,2);
         this.ram3 = utils.formatearDecimales(ram3,2);
-        this.timeInLlegar = utils.formatearDecimales(timeInLlegar,2);
-        this.timeInA = utils.formatearDecimales(timeInA,2);
-        this.tiempoEspera = utils.formatearDecimales(tiempoEspera,2);
-        this.timeInSystem = utils.formatearDecimales(timeInSystem,2);
-        this.horaLlegada = horaLlegada;
-        this.horaInicio = horaInicio;
-        this.horaSalida = horaSalida;
-        this.isDefectuosa = isDefectuosa;
     }
-
+    
     public int getId() {
         return id;
     }
@@ -32,6 +26,16 @@ public class pieza_A {
     public void setId(int id) {
         this.id = id;
     }
+
+    public int getIdtorno() {
+        return idtorno;
+    }
+
+    public void setIdtorno(int idtorno) {
+        this.idtorno = idtorno;
+    }
+    
+    
 
     public double getRam1() {
         return ram1;
