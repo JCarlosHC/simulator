@@ -1,6 +1,7 @@
 package net.model;
 
 import java.util.Date;
+import net.dao.utils;
 
 public class pieza_B_Error {
     private int idPieza;
@@ -10,9 +11,11 @@ public class pieza_B_Error {
     private int idtorno;  
     private int idfresa;
 
-    public pieza_B_Error(int idPieza, double ramDefectuosa, Date horaLlegada, Date horaInicioFresas) {
+    public pieza_B_Error(int idPieza, double ramTornos, double ramFresas, double ramDefectuosa, Date horaLlegada, Date horaInicioFresas) {
         this.idPieza = idPieza;
-        this.ramDefectuosa = ramDefectuosa;
+        this.ramTornos = utils.formatearDecimales(ramTornos,2);
+        this.ramFresas = utils.formatearDecimales(ramFresas,2);
+        this.ramDefectuosa = utils.formatearDecimales(ramDefectuosa,2);
         this.horaLlegada = horaLlegada;
         this.horaInicioFresas = horaInicioFresas;
     }
@@ -30,7 +33,7 @@ public class pieza_B_Error {
     }
 
     public void setRamTornos(double ramTornos) {
-        this.ramTornos = ramTornos;
+        this.ramTornos = utils.formatearDecimales(ramTornos,2);
     }
 
     public double getRamFresas() {
@@ -38,7 +41,7 @@ public class pieza_B_Error {
     }
 
     public void setRamFresas(double ramFresas) {
-        this.ramFresas = ramFresas;
+        this.ramFresas = utils.formatearDecimales(ramFresas,2);
     }
 
     public double getRamDefectuosa() {
@@ -46,7 +49,7 @@ public class pieza_B_Error {
     }
 
     public void setRamDefectuosa(double ramDefectuosa) {
-        this.ramDefectuosa = ramDefectuosa;
+        this.ramDefectuosa = utils.formatearDecimales(ramDefectuosa,2);
     }
 
     public double getTimeInTornos() {
@@ -54,7 +57,7 @@ public class pieza_B_Error {
     }
 
     public void setTimeInTornos(double timeInTornos) {
-        this.timeInTornos = timeInTornos;
+        this.timeInTornos = utils.formatearDecimales(timeInTornos,2);
     }
 
     public double getTimeInFresas() {
@@ -62,7 +65,7 @@ public class pieza_B_Error {
     }
 
     public void setTimeInFresas(double timeInFresas) {
-        this.timeInFresas = timeInFresas;
+        this.timeInFresas = utils.formatearDecimales(timeInFresas,2);
     }
 
     public double getTiempoEsperaTornos() {
@@ -70,7 +73,7 @@ public class pieza_B_Error {
     }
 
     public void setTiempoEsperaTornos(double tiempoEsperaTornos) {
-        this.tiempoEsperaTornos = tiempoEsperaTornos;
+        this.tiempoEsperaTornos = utils.formatearDecimales(tiempoEsperaTornos,2);
     }
 
     public double getTiempoEsperaFresas() {
@@ -78,7 +81,7 @@ public class pieza_B_Error {
     }
 
     public void setTiempoEsperaFresas(double tiempoEsperaFresas) {
-        this.tiempoEsperaFresas = tiempoEsperaFresas;
+        this.tiempoEsperaFresas = utils.formatearDecimales(tiempoEsperaFresas,2);
     }
 
     public Date getHoraLlegada() {
