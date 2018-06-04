@@ -4,6 +4,7 @@ import java.util.Date;
 import net.dao.utils;
 
 public class pieza_B_Error {
+    private int id;
     private int idPieza;
     private double ramTornos, ramFresas, ramDefectuosa, timeInTornos, timeInFresas, tiempoEsperaTornos, tiempoEsperaFresas;
     private Date horaLlegada, horaInicioTornos, horaSalidaTornos, horaInicioFresas, horaSalidaFresas;
@@ -11,13 +12,22 @@ public class pieza_B_Error {
     private int idtorno;  
     private int idfresa;
 
-    public pieza_B_Error(int idPieza, double ramTornos, double ramFresas, double ramDefectuosa, Date horaLlegada, Date horaInicioFresas) {
+    public pieza_B_Error(int id, int idPieza, double ramTornos, double ramFresas, double ramDefectuosa, Date horaLlegada, Date horaInicioFresas) {
+        this.id = id;
         this.idPieza = idPieza;
         this.ramTornos = utils.formatearDecimales(ramTornos,2);
         this.ramFresas = utils.formatearDecimales(ramFresas,2);
         this.ramDefectuosa = utils.formatearDecimales(ramDefectuosa,2);
         this.horaLlegada = horaLlegada;
         this.horaInicioFresas = horaInicioFresas;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public int getIdPieza() {

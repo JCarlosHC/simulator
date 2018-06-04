@@ -4,18 +4,28 @@ import java.util.Date;
 import net.dao.utils;
 
 public class pieza_A_Error {
+    private int id;
     private int idPieza;
     private double ramTornos, ramDefectuosa, timeInA, tiempoEspera;
     private Date horaLlegada, horaInicio, horaSalida;
     private Boolean isDefectuosa;
     private int idtorno;  
 
-    public pieza_A_Error(int idPieza, double ramTornos, double ramDefectuosa, Date horaLlegada, Date horaInicio) {
+    public pieza_A_Error(int id, int idPieza, double ramTornos, double ramDefectuosa, Date horaLlegada, Date horaInicio) {
+        this.id = id;
         this.idPieza = idPieza;
         this.ramTornos = utils.formatearDecimales(ramTornos,2);
         this.ramDefectuosa = utils.formatearDecimales(ramDefectuosa,2);
         this.horaLlegada = horaLlegada;
         this.horaInicio = horaInicio;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public int getIdPieza() {
