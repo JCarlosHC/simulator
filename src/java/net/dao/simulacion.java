@@ -1,15 +1,14 @@
 package net.dao;
 
-import com.json.JSONArray;
-import com.json.JSONObject;
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import net.model.fresa;
 import net.model.pieza_A;
 import net.model.pieza_A_Error;
 import net.model.pieza_B;
 import net.model.pieza_B_Error;
+import net.model.relacionPiezaError;
 import net.model.torno;
 
 public class simulacion {
@@ -17,25 +16,62 @@ public class simulacion {
     private Date fecha_actual, fecha_final;
     private ArrayList<pieza_A> listA;
     private ArrayList<pieza_B> listB;
+    private ArrayList<fresa> fresas;
+    private ArrayList<torno> tornos;
+    private ArrayList<relacionPiezaError> relacion;
 
     public simulacion(Date fechaAct, Date fechaFin) {
         this.fecha_actual = fechaAct;
         this.fecha_final = fechaFin;
+        this.tornos = new ArrayList<>();
+        torno t = new torno(1, 0);
+        t.setHorafin(fechaAct);
+        this.tornos.add(t);
+        this.fresas = new ArrayList<>();
+        fresa f = new fresa(1, 0);
+        f.setHorafin(fechaAct);
+        this.fresas.add(f);
     }
 
-    //Llenamos la estructura de piezas A
+    public ArrayList<relacionPiezaError> creaRelacion() {
+        ArrayList<relacionPiezaError> relacion = new ArrayList<>();
+        //Agregamos todo lo de a
+        for (pieza_A pa : listA) {
+            relacionPiezaError rel = new relacionPiezaError(pa.getId(), -1, pa.getHoraInicio(), pa.getHoraSalida());
+            relacion.add(rel);
+            if (pa.getIsDefectuosa()) {
+                for (pieza_A_Error eA : pa.getErrores()) {
+                    relacionPiezaError rele = new relacionPiezaError(eA.getIdPieza(), eA.getId(), eA.getHoraInicio(), eA.getHoraSalida());
+                    relacion.add(rele);
+                }
+            }
+        }
+        for (pieza_B pb : listB) {
+            relacionPiezaError rel = new relacionPiezaError(pb.getId(), -1, pb.getHoraInicioTornos(), pb.getHoraSalidaTornos());
+            relacion.add(rel);
+            if (pb.getIsDefectuosa()) {
+                for (pieza_B_Error eB : pb.getErrores()) {
+                    relacionPiezaError rele = new relacionPiezaError(eB.getIdPieza(), eB.getId(), eB.getHoraInicioTornos(), eB.getHoraSalidaTornos());
+                    relacion.add(rele);
+                }
+            }
+        }
+
+        return relacion;
+    }
+
     public ArrayList<pieza_A> getSimulacionA(Date fecha_actual, Date fecha_final) {
         ArrayList<pieza_A> lista_piezasA = new ArrayList<>();
         ArrayList<pieza_A_Error> errores;
 
-        int tiempoSistemaA, i = 0, validaSimulacion;
+        int tiempoSistemaA, i = 0, validaSimulacion, ie;
         Date horaLlegadaA = fecha_actual, horaSalidaSystem;
         Boolean isDefectuosa;
 
         do {
             //Inicializando objetos
             errores = new ArrayList<>();
-            pieza_A pA = new pieza_A(i, utils.randomWithRange(0, 1), utils.randomWithRange(0, 1), utils.randomWithRange(0, 1));
+            pieza_A pA = new pieza_A(i + "a", utils.randomWithRange(0, 1), utils.randomWithRange(0, 1), utils.randomWithRange(0, 1));
 
             pA.setTimeInLlegar(2 + (6 * pA.getRam1())); //y = 2 + 6ri
             pA.setTimeInA(5 + (6 * pA.getRam2())); // z = 5 + 6ri
@@ -53,21 +89,21 @@ public class simulacion {
             pA.setTiempoEspera(0);
             pA.setIsDefectuosa((pA.getRam3() <= 0.25));
             isDefectuosa = pA.getIsDefectuosa();
-
+            ie = 0;
             while (isDefectuosa) {
-                pieza_A_Error pA_error = new pieza_A_Error(pA.getId(), utils.randomWithRange(0, 1),
+                pieza_A_Error pA_error = new pieza_A_Error(ie, pA.getId(), utils.randomWithRange(0, 1),
                         utils.randomWithRange(0, 1), pA.getHoraSalida(), pA.getHoraSalida());
 
                 pA_error.setTimeInA(5 + (6 * pA_error.getRamTornos()));
                 pA_error.setHoraSalida(utils.sumarRestarSegundos(
-                        pA.getHoraInicio(), utils.convertirMinutosSeconds(pA_error.getTimeInA())
+                        pA_error.getHoraInicio(), utils.convertirMinutosSeconds(pA_error.getTimeInA())
                 ));
                 pA_error.setTiempoEspera(0);
                 pA_error.setIsDefectuosa((pA_error.getRamDefectuosa() <= 0.25));
                 isDefectuosa = pA_error.getIsDefectuosa();
 
                 errores.add(pA_error);
-
+                ie++;
             }
             pA.setErrores(errores);
             if (errores != null && !errores.isEmpty()) {
@@ -78,7 +114,7 @@ public class simulacion {
                 tiempoSistemaA = (int) (pA.getHoraSalida().getTime() - pA.getHoraLlegada().getTime());
             }
 
-            pA.setTimeInSystem(tiempoSistemaA);
+            pA.setTimeInSystem(utils.convertirMilisecondstoMinuts(tiempoSistemaA));
             validaSimulacion = horaSalidaSystem.compareTo(fecha_final);
 
             lista_piezasA.add(pA);
@@ -92,14 +128,14 @@ public class simulacion {
         ArrayList<pieza_B> lista_piezasB = new ArrayList<>();
         ArrayList<pieza_B_Error> errores;
 
-        int tiempoSistemaB, i = 0, validaSimulacion;
+        int tiempoSistemaB, i = 0, validaSimulacion, ie;
         Date horaLlegadaB_Fresas = fecha_actual, horaSalidaSystem;
         Boolean isDefectuosa;
 
         do {
             //Inicializando objetos
             errores = new ArrayList<>();
-            pieza_B pB = new pieza_B(i, utils.randomWithRange(0, 1), utils.randomWithRange(0, 1), utils.randomWithRange(0, 1), utils.randomWithRange(0, 1));
+            pieza_B pB = new pieza_B(i + "b", utils.randomWithRange(0, 1), utils.randomWithRange(0, 1), utils.randomWithRange(0, 1), utils.randomWithRange(0, 1));
 
             pB.setTimeInLlegar(5 + (6 * pB.getRam1())); //Y = 5 + 6ri
             // A is tornos, B is fresas
@@ -124,9 +160,9 @@ public class simulacion {
             pB.setTiempoEsperaTornos(0);
             pB.setIsDefectuosa((pB.getRam4() <= 0.05));
             isDefectuosa = pB.getIsDefectuosa();
-
+            ie = 0;
             while (isDefectuosa) {
-                pieza_B_Error pB_error = new pieza_B_Error(pB.getId(), utils.randomWithRange(0, 1),
+                pieza_B_Error pB_error = new pieza_B_Error(ie, pB.getId(), utils.randomWithRange(0, 1),
                         utils.randomWithRange(0, 1), utils.randomWithRange(0, 1), pB.getHoraSalidaTornos(), pB.getHoraSalidaTornos());
 
                 pB_error.setTimeInTornos(2 + (2 * pB.getRam2())); // Z = 2 + 2ri
@@ -148,6 +184,7 @@ public class simulacion {
                 isDefectuosa = pB_error.getIsDefectuosa();
 
                 errores.add(pB_error);
+                ie++;
             }
             pB.setErrores(errores);
             if (errores != null && !errores.isEmpty()) {
@@ -157,7 +194,7 @@ public class simulacion {
                 tiempoSistemaB = (int) (pB.getHoraSalidaTornos().getTime() - pB.getHoraLlegada().getTime());
                 horaSalidaSystem = pB.getHoraSalidaTornos();
             }
-            pB.setTimeInSystem(tiempoSistemaB);
+            pB.setTimeInSystem(utils.convertirMilisecondstoMinuts(tiempoSistemaB));
             validaSimulacion = horaSalidaSystem.compareTo(fecha_final);
 
             lista_piezasB.add(pB);
@@ -168,101 +205,134 @@ public class simulacion {
         return lista_piezasB;
     }
 
-    public JSONObject getSimulacion() {
-        JSONObject objJson = new JSONObject();
-        JSONArray objPiezasA, objPiezasB, objtornos, objfresas;
-
+    public void getSimulacion() {
         this.listA = getSimulacionA(fecha_actual, fecha_final);
         this.listB = getSimulacionB(fecha_actual, fecha_final);
-        ArrayList<torno> tornos = new ArrayList<>();
-        ArrayList<fresa> fresas = new ArrayList<>();
+        this.relacion = creaRelacion();
+        Collections.sort(relacion, new horaLlegadaPiezaComparator());
+        asignarTornos();
+    }
 
-        int idtorno = 1, idtornodisponible, idfresa = 1, idfresadisponible, ultimo = 0;
-        Boolean continua = true;
-        char who;
-        Date horasalida;
-        
-        //Inicializo mis tornos y fresas.
-        torno t = new torno(idtorno, 0);
-        t.setHorafin(fecha_actual);
-        tornos.add(t);
-        fresa f = new fresa(idfresa, 0);
-        f.setHorafin(fecha_actual);
-        fresas.add(f);
-
-        for (pieza_B piezaB : this.listB) {
-            //Refrescamos status fresas
-            changeStatusFresa(fresas, piezaB.getHoraLlegada());
-            //si es 0 no encontro disponibles dentro de los que ya hay
-            idfresadisponible = buscafresaDisponible(fresas);
-            if (idfresadisponible == 0) {
-                idfresa++;
-                fresa nuevo = new fresa(idfresa, 0);
-                fresas.add(nuevo);
-                idfresadisponible = idfresa;
-            }
-            //Actualizamos informacion fresas
-            fresas.get(idfresadisponible - 1).setHorafin(piezaB.getHoraSalida());
-            fresas.get(idfresadisponible - 1).setStatus(1);
-            piezaB.setIdfresa(idfresadisponible);
-            
-            continua = true;
-            while(continua){
-                pieza_A piezaA = listA.get(ultimo);
-                //Se compara las horas de la pieza a y b para ver quien entra primero
-                if(piezaA.getIdtorno() == 0 && piezaB.getIdtorno() == 0){
-                    if (compareDate(piezaB.getHoraLlegadaTornos(), piezaA.getHoraLlegada())) {
-                        changeStatusTorno(tornos, piezaA.getHoraLlegada());
-                        horasalida = piezaA.getHoraSalida();
-                        who = 'a';
-                    } else {
-                        changeStatusTorno(tornos, piezaB.getHoraLlegadaTornos());
-                        horasalida = piezaB.getHoraSalidaTornos();
-                        who = 'b';
+    private void asignarTornos() {
+        int id, idfresadisponible, idfresa = 1, idtornodisponible, idtorno = 1;
+        for (relacionPiezaError rel : this.relacion) {
+            id = getIdPieza(rel.getIdpieza());
+            if (rel.getIdpieza().contains("a")) {
+                if (rel.getIderror() == -1) {
+                    pieza_A pa = listA.get(id);
+                    changeStatusTorno(tornos, pa.getHoraLlegada());
+                    //si es 0 no encontro disponibles dentro de los que ya hay
+                    idtornodisponible = buscaTornoDisponible(tornos);
+                    if (idtornodisponible == 0) {
+                        idtorno++;
+                        torno nuevo = new torno(idtorno, 0);
+                        tornos.add(nuevo);
+                        idtornodisponible = idtorno;
                     }
-                } else if(piezaA.getIdtorno() == 0){
-                    changeStatusTorno(tornos, piezaA.getHoraLlegada());
-                    horasalida = piezaA.getHoraSalida();
-                    who = 'a';
-                } else{
-                    changeStatusTorno(tornos, piezaB.getHoraLlegadaTornos());
-                    horasalida = piezaB.getHoraSalidaTornos();
-                    who = 'b';
-                }
-                //si es 0 no encontro disponibles dentro de los que ya hay
-                idtornodisponible = buscaTornoDisponible(tornos);
-                if (idtornodisponible == 0) {
-                    idtorno++;
-                    torno nuevo = new torno(idtorno, 0);
-                    tornos.add(nuevo);
-                    idtornodisponible = idtorno;
-                }
-                 //Actualizamos informacion tornos
-                tornos.get(idtornodisponible - 1).setHorafin(horasalida);
-                tornos.get(idtornodisponible - 1).setStatus(1);
-                
-                if(who == 'a') {
-                    ultimo++;
-                    piezaA.setIdtorno(idtornodisponible);
+                    //Actualizamos informacion tornos
+                    tornos.get(idtornodisponible - 1).setHorafin(pa.getHoraSalida());
+                    tornos.get(idtornodisponible - 1).setStatus(1);
+                    pa.setIdtorno(idtornodisponible);
                 } else {
-                    piezaB.setIdtorno(idtornodisponible);
+                    pieza_A_Error eA = listA.get(id).getErrores().get(rel.getIderror());
+                    changeStatusTorno(tornos, eA.getHoraLlegada());
+                    //si es 0 no encontro disponibles dentro de los que ya hay
+                    idtornodisponible = buscaTornoDisponible(tornos);
+                    if (idtornodisponible == 0) {
+                        idtorno++;
+                        torno nuevo = new torno(idtorno, 0);
+                        tornos.add(nuevo);
+                        idtornodisponible = idtorno;
+                    }
+                    //Actualizamos informacion tornos
+                    tornos.get(idtornodisponible - 1).setHorafin(eA.getHoraSalida());
+                    tornos.get(idtornodisponible - 1).setStatus(1);
+                    eA.setIdtorno(idtornodisponible);
                 }
-                
-                if(piezaA.getIdtorno() > 0 && piezaB.getIdtorno() > 0) continua = false;
-                
+            } else {
+                if (rel.getIderror() == -1) {
+                    pieza_B pb = listB.get(id);
+                    //Refrescamos status fresas
+                    changeStatusFresa(fresas, pb.getHoraLlegada());
+                    //si es 0 no encontro disponibles dentro de los que ya hay
+                    idfresadisponible = buscafresaDisponible(fresas);
+                    if (idfresadisponible == 0) {
+                        idfresa++;
+                        fresa nuevo = new fresa(idfresa, 0);
+                        fresas.add(nuevo);
+                        idfresadisponible = idfresa;
+                    }
+                    //Actualizamos informacion fresas
+                    fresas.get(idfresadisponible - 1).setHorafin(pb.getHoraSalida());
+                    fresas.get(idfresadisponible - 1).setStatus(1);
+                    pb.setIdfresa(idfresadisponible);
+
+                    changeStatusTorno(tornos, pb.getHoraLlegadaTornos());
+                    //si es 0 no encontro disponibles dentro de los que ya hay
+                    idtornodisponible = buscaTornoDisponible(tornos);
+                    if (idtornodisponible == 0) {
+                        idtorno++;
+                        torno nuevo = new torno(idtorno, 0);
+                        tornos.add(nuevo);
+                        idtornodisponible = idtorno;
+                    }
+                    //Actualizamos informacion tornos
+                    tornos.get(idtornodisponible - 1).setHorafin(pb.getHoraSalidaTornos());
+                    tornos.get(idtornodisponible - 1).setStatus(1);
+                    pb.setIdtorno(idtornodisponible);
+                } else {
+                    pieza_B_Error eB = listB.get(id).getErrores().get(rel.getIderror());
+                    //Refrescamos status fresas
+                    changeStatusFresa(fresas, eB.getHoraInicioFresas());
+                    //si es 0 no encontro disponibles dentro de los que ya hay
+                    idfresadisponible = buscafresaDisponible(fresas);
+                    if (idfresadisponible == 0) {
+                        idfresa++;
+                        fresa nuevo = new fresa(idfresa, 0);
+                        fresas.add(nuevo);
+                        idfresadisponible = idfresa;
+                    }
+                    //Actualizamos informacion fresas
+                    fresas.get(idfresadisponible - 1).setHorafin(eB.getHoraSalidaFresas());
+                    fresas.get(idfresadisponible - 1).setStatus(1);
+                    eB.setIdfresa(idfresadisponible);
+
+                    changeStatusTorno(tornos, eB.getHoraInicioTornos());
+                    //si es 0 no encontro disponibles dentro de los que ya hay
+                    idtornodisponible = buscaTornoDisponible(tornos);
+                    if (idtornodisponible == 0) {
+                        idtorno++;
+                        torno nuevo = new torno(idtorno, 0);
+                        tornos.add(nuevo);
+                        idtornodisponible = idtorno;
+                    }
+                    //Actualizamos informacion tornos
+                    tornos.get(idtornodisponible - 1).setHorafin(eB.getHoraSalidaTornos());
+                    tornos.get(idtornodisponible - 1).setStatus(1);
+                    eB.setIdtorno(idtornodisponible);
+                }
             }
         }
+    }
 
-        objPiezasA = new JSONArray(this.listA);
-        objPiezasB = new JSONArray(this.listB);
-        objtornos = new JSONArray(tornos);
-        objfresas = new JSONArray(fresas);
-        objJson.put("tornos", objtornos);
-        objJson.put("fresas", objfresas);
-        objJson.put("listaA", objPiezasA);
-        objJson.put("listaB", objPiezasB);
-
-        return objJson;
+    private int getIdPieza(String id) {
+        int index = -1;
+        if (id.contains("a")) {
+            for (pieza_A pa : listA) {
+                if(pa.getId().equals(id)){
+                    index = listA.indexOf(pa);
+                    break;
+                }
+            }
+        } else {
+            for (pieza_B pb : listB) {
+                if(pb.getId().equals(id)){
+                    index = listB.indexOf(pb);
+                    break;
+                }
+            }
+        }
+        return index;
     }
 
     private int buscaTornoDisponible(ArrayList<torno> lista) {
@@ -362,6 +432,30 @@ public class simulacion {
 
     public void setListB(ArrayList<pieza_B> listB) {
         this.listB = listB;
+    }
+
+    public ArrayList<fresa> getFresas() {
+        return fresas;
+    }
+
+    public void setFresas(ArrayList<fresa> fresas) {
+        this.fresas = fresas;
+    }
+
+    public ArrayList<torno> getTornos() {
+        return tornos;
+    }
+
+    public void setTornos(ArrayList<torno> tornos) {
+        this.tornos = tornos;
+    }
+
+    public ArrayList<relacionPiezaError> getRelacion() {
+        return relacion;
+    }
+
+    public void setRelacion(ArrayList<relacionPiezaError> relacion) {
+        this.relacion = relacion;
     }
 
 }
