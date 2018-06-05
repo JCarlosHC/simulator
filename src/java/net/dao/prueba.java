@@ -20,12 +20,13 @@ public class prueba {
             simulacion datos = new simulacion(fechainicio, fechafin);
             datos.getSimulacion();
             System.out.println("Piezas A");
+            
             for(pieza_A pa: datos.getListA()){
-                
+                System.out.println(pa.toString());
             }
             System.out.println("Piezas B");
             for(pieza_B pb: datos.getListB()){
-            
+                System.out.println(pb.toString());
             }
             
         } catch (ParseException ex) {
