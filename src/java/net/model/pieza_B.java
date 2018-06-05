@@ -1,7 +1,7 @@
 package net.model;
 
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import net.dao.utils;
 
 public class pieza_B {
@@ -11,7 +11,7 @@ public class pieza_B {
     private Date horaLlegadaTornos, horaInicioTornos, horaSalidaTornos;
     private Boolean isDefectuosa; //5% y 95%
     private int idtorno, idfresa;
-    private List<pieza_B_Error> errores;
+    private ArrayList<pieza_B_Error> errores;
     
     public pieza_B(){}
 
@@ -185,11 +185,11 @@ public class pieza_B {
         this.isDefectuosa = isDefectuosa;
     }
 
-    public List<pieza_B_Error> getErrores() {
+    public ArrayList<pieza_B_Error> getErrores() {
         return errores;
     }
 
-    public void setErrores(List<pieza_B_Error> errores) {
+    public void setErrores(ArrayList<pieza_B_Error> errores) {
         this.errores = errores;
     }
 
