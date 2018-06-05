@@ -5,7 +5,7 @@ import java.util.List;
 import net.dao.utils;
 
 public class pieza_A {
-    private int id;
+    private String id;
     private double ram1, ram2, ram3, timeInLlegar, timeInA, tiempoEspera, timeInSystem;
     private Date horaLlegada, horaInicio, horaSalida;
     private Boolean isDefectuosa;
@@ -14,18 +14,18 @@ public class pieza_A {
     
     public pieza_A(){}
 
-    public pieza_A(int id, double ram1, double ram2, double ram3) {
+    public pieza_A(String id, double ram1, double ram2, double ram3) {
         this.id = id;
         this.ram1 = utils.formatearDecimales(ram1,2);
         this.ram2 = utils.formatearDecimales(ram2,2);
         this.ram3 = utils.formatearDecimales(ram3,2);
     }
     
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -133,6 +133,11 @@ public class pieza_A {
 
     public void setErrores(List<pieza_A_Error> errores) {
         this.errores = errores;
+    }
+
+    @Override
+    public String toString() {
+        return "pieza_A{" + "id=" + id + ", ram1=" + ram1 + ", ram2=" + ram2 + ", ram3=" + ram3 + ", timeInLlegar=" + timeInLlegar + ", timeInA=" + timeInA + ", tiempoEspera=" + tiempoEspera + ", timeInSystem=" + timeInSystem + ", horaLlegada=" + horaLlegada + ", horaInicio=" + horaInicio + ", horaSalida=" + horaSalida + ", isDefectuosa=" + isDefectuosa + ", idtorno=" + idtorno + ", errores=" + errores + '}';
     }
 
   

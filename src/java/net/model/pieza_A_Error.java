@@ -5,13 +5,13 @@ import net.dao.utils;
 
 public class pieza_A_Error {
     private int id;
-    private int idPieza;
+    private String idPieza;
     private double ramTornos, ramDefectuosa, timeInA, tiempoEspera;
     private Date horaLlegada, horaInicio, horaSalida;
     private Boolean isDefectuosa;
     private int idtorno;  
 
-    public pieza_A_Error(int id, int idPieza, double ramTornos, double ramDefectuosa, Date horaLlegada, Date horaInicio) {
+    public pieza_A_Error(int id, String idPieza, double ramTornos, double ramDefectuosa, Date horaLlegada, Date horaInicio) {
         this.id = id;
         this.idPieza = idPieza;
         this.ramTornos = utils.formatearDecimales(ramTornos,2);
@@ -28,11 +28,11 @@ public class pieza_A_Error {
         this.id = id;
     }
 
-    public int getIdPieza() {
+    public String getIdPieza() {
         return idPieza;
     }
 
-    public void setIdPieza(int idPieza) {
+    public void setIdPieza(String idPieza) {
         this.idPieza = idPieza;
     }
 
@@ -106,6 +106,11 @@ public class pieza_A_Error {
 
     public void setIdtorno(int idtorno) {
         this.idtorno = idtorno;
+    }
+
+    @Override
+    public String toString() {
+        return "pieza_A_Error{" + "id=" + id + ", idPieza=" + idPieza + ", ramTornos=" + ramTornos + ", ramDefectuosa=" + ramDefectuosa + ", timeInA=" + timeInA + ", tiempoEspera=" + tiempoEspera + ", horaLlegada=" + horaLlegada + ", horaInicio=" + horaInicio + ", horaSalida=" + horaSalida + ", isDefectuosa=" + isDefectuosa + ", idtorno=" + idtorno + '}';
     }
     
     

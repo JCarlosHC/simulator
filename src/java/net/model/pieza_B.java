@@ -5,7 +5,7 @@ import java.util.List;
 import net.dao.utils;
 
 public class pieza_B {
-    private int id;
+    private String id;
     private double ram1, ram2, ram3, ram4, timeInLlegar, timeInA, tiempoEspera, tiempoEsperaTornos, timeInSystem, timeInB; //A es tornos, B Fresas
     private Date horaLlegada, horaInicio, horaSalida;
     private Date horaLlegadaTornos, horaInicioTornos, horaSalidaTornos;
@@ -15,7 +15,7 @@ public class pieza_B {
     
     public pieza_B(){}
 
-    public pieza_B(int id, double ram1, double ram2, double ram3, double ram4) {
+    public pieza_B(String id, double ram1, double ram2, double ram3, double ram4) {
         this.id = id;
         this.ram1 = utils.formatearDecimales(ram1,2);
         this.ram2 = utils.formatearDecimales(ram2,2);
@@ -24,11 +24,11 @@ public class pieza_B {
     }
     
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -191,6 +191,11 @@ public class pieza_B {
 
     public void setErrores(List<pieza_B_Error> errores) {
         this.errores = errores;
+    }
+
+    @Override
+    public String toString() {
+        return "pieza_B{" + "id=" + id + ", ram1=" + ram1 + ", ram2=" + ram2 + ", ram3=" + ram3 + ", ram4=" + ram4 + ", timeInLlegar=" + timeInLlegar + ", timeInA=" + timeInA + ", tiempoEspera=" + tiempoEspera + ", tiempoEsperaTornos=" + tiempoEsperaTornos + ", timeInSystem=" + timeInSystem + ", timeInB=" + timeInB + ", horaLlegada=" + horaLlegada + ", horaInicio=" + horaInicio + ", horaSalida=" + horaSalida + ", horaLlegadaTornos=" + horaLlegadaTornos + ", horaInicioTornos=" + horaInicioTornos + ", horaSalidaTornos=" + horaSalidaTornos + ", isDefectuosa=" + isDefectuosa + ", idtorno=" + idtorno + ", idfresa=" + idfresa + ", errores=" + errores + '}';
     }
 
   

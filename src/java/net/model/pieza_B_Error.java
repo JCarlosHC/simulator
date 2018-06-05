@@ -5,14 +5,14 @@ import net.dao.utils;
 
 public class pieza_B_Error {
     private int id;
-    private int idPieza;
+    private String idPieza;
     private double ramTornos, ramFresas, ramDefectuosa, timeInTornos, timeInFresas, tiempoEsperaTornos, tiempoEsperaFresas;
     private Date horaLlegada, horaInicioTornos, horaSalidaTornos, horaInicioFresas, horaSalidaFresas;
     private Boolean isDefectuosa;
     private int idtorno;  
     private int idfresa;
 
-    public pieza_B_Error(int id, int idPieza, double ramTornos, double ramFresas, double ramDefectuosa, Date horaLlegada, Date horaInicioFresas) {
+    public pieza_B_Error(int id, String idPieza, double ramTornos, double ramFresas, double ramDefectuosa, Date horaLlegada, Date horaInicioFresas) {
         this.id = id;
         this.idPieza = idPieza;
         this.ramTornos = utils.formatearDecimales(ramTornos,2);
@@ -30,11 +30,11 @@ public class pieza_B_Error {
         this.id = id;
     }
 
-    public int getIdPieza() {
+    public String getIdPieza() {
         return idPieza;
     }
 
-    public void setIdPieza(int idPieza) {
+    public void setIdPieza(String idPieza) {
         this.idPieza = idPieza;
     }
 
@@ -156,6 +156,11 @@ public class pieza_B_Error {
 
     public void setIdfresa(int idfresa) {
         this.idfresa = idfresa;
+    }
+
+    @Override
+    public String toString() {
+        return "pieza_B_Error{" + "id=" + id + ", idPieza=" + idPieza + ", ramTornos=" + ramTornos + ", ramFresas=" + ramFresas + ", ramDefectuosa=" + ramDefectuosa + ", timeInTornos=" + timeInTornos + ", timeInFresas=" + timeInFresas + ", tiempoEsperaTornos=" + tiempoEsperaTornos + ", tiempoEsperaFresas=" + tiempoEsperaFresas + ", horaLlegada=" + horaLlegada + ", horaInicioTornos=" + horaInicioTornos + ", horaSalidaTornos=" + horaSalidaTornos + ", horaInicioFresas=" + horaInicioFresas + ", horaSalidaFresas=" + horaSalidaFresas + ", isDefectuosa=" + isDefectuosa + ", idtorno=" + idtorno + ", idfresa=" + idfresa + '}';
     }
     
     
