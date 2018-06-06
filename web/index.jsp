@@ -34,7 +34,7 @@
             <div class="page-header">
                 <div class="row">
                     <div class="col-md-1">
-                        <img src="images/ipn-logo.png" alt="logo ipn" width="100%;">
+                        <img src="images/ipn-logo.png" alt="logo ipn" width="150%;">
                     </div>
                     <div class="col-md-10">
                         <h1 class="text-center">INSTITUTO POLITECNICO NACIONAL</h1>
@@ -46,11 +46,14 @@
                 </div>
             </div>
             <h2 class="text-center">Simulacion del sistema</h2>   
+            <p>Integrantes: 
+            <ul><li>Hernandez Castro Juan Carlos</li><li>Tepale Cruz Tonatiuh</li></ul>
+            </p>
             <a href="javascript:void(0);" id="show">Mostrar redacción</a>
             <div id="element" class="row" style="display: none;">
                 <div id="close"><a href="javascript:void(0);" id="hide">ocultar</a></div>
                 <p>
-                    A un sistema de producción llegan piezas de tipo A a cada 5+-3 minutos y piezas tipo B cada 3+-2 minutos. Las piezas A pasan por el departamento de tornos cuyo tiempo de proceso es 8+-3 minutos, al salir de este departamento el 25% son defectuosas y deben reprocesarse, el 75% son buenas y salen del sistema hacia ventas. Las piezas B pasan primero por el departamento de fresas donde el tiempo de proceso es de 9+-3 minutos y, despues, por el departamento de tornos donde el tiempo de proceso es de 3+-1 minutos, al salir de este departamento se estima que el 5% son defectuosas y deben reprocesarse desde el principio; el 95% restante sale del sistema para su venta.
+                    3.62. A un sistema de producción llegan piezas de tipo A a cada 5+-3 minutos y piezas tipo B cada 3+-2 minutos. Las piezas A pasan por el departamento de tornos cuyo tiempo de proceso es 8+-3 minutos, al salir de este departamento el 25% son defectuosas y deben reprocesarse, el 75% son buenas y salen del sistema hacia ventas. Las piezas B pasan primero por el departamento de fresas donde el tiempo de proceso es de 9+-3 minutos y, despues, por el departamento de tornos donde el tiempo de proceso es de 3+-1 minutos, al salir de este departamento se estima que el 5% son defectuosas y deben reprocesarse desde el principio; el 95% restante sale del sistema para su venta.
                 </p>
                 <p>
                     A) Simule 1 mes y determine el minimo numero de tornos y fresas para que ambos productos fluyan continuamente a traves del sistema. Indicando el numero de piezas A y B producidas durante el mes.
